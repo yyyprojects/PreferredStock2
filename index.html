@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic: A Guide to Preferred Stock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Brilliant Blues -->
+    <!-- Application Structure Plan: The infographic follows a logical narrative for an investor learning about preferred stock. It starts with a high-level definition (Hero Section), then immediately visualizes the most critical concept: its place in the capital structure (The Capital Stack). It then moves to a direct comparison with its closest alternative (Preferred vs. Common), details the variations (Types of Preferred Stock), and presents a balanced view for decision-making (Investor's Scorecard). Finally, it covers market context (Who Issues It?) and key risks (Interest Rate & Call Risk) to provide a complete picture. This top-down, narrative structure is more intuitive for learning than a direct mirror of the report's sections. -->
+    <!-- Visualization & Content Choices: 
+        - Data Point: Capital Structure Hierarchy -> Goal: Organize -> Viz: Styled HTML Diagram -> Justification: A simple, stacked visual is the most effective way to show a clear hierarchy of payment priority. Method: HTML/Tailwind.
+        - Data Point: Preferred vs. Common Stock attributes -> Goal: Compare -> Viz: Horizontal Bar Chart -> Justification: Allows for easy, direct comparison across multiple metrics like yield, risk, and growth potential. Library: Chart.js/Canvas.
+        - Data Point: Issuer Sector Concentration -> Goal: Compare (Composition) -> Viz: Donut Chart -> Justification: Clearly shows the disproportionate weight of the financial sector in the preferred stock market, a key insight from the report. Library: Chart.js/Canvas.
+        - Data Point: Interest Rate Sensitivity -> Goal: Show Relationship -> Viz: Line Chart -> Justification: Visually demonstrates the inverse relationship between interest rates and the value of fixed-income assets like preferred stock. Library: Chart.js/Canvas.
+        - Data Point: Pros & Cons -> Goal: Organize -> Viz: Two-column list with Unicode icons -> Justification: A simple, highly scannable format for summarizing key takeaways for an investor. Method: HTML/Tailwind.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F4F8;
+        }
+        .text-balance { text-wrap: balance; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="text-[#003F5C]">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+
+        <section class="text-center mb-16">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-[#003F5C] mb-4 text-balance">The Investor's Guide to Preferred Stock</h1>
+            <p class="text-lg md:text-xl text-[#374C80] max-w-3xl mx-auto text-balance">A look at the hybrid security that blends the features of stocks and bonds, offering income and stability with a unique set of trade-offs.</p>
+        </section>
+
+        <section id="capital-stack" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2">Where Does It Stand?</h2>
+            <p class="text-center text-[#374C80] mb-8 max-w-2xl mx-auto">In case of bankruptcy, the "capital stack" determines who gets paid first. Preferred stock sits in the middle, making it safer than common stock but riskier than bonds.</p>
+            <div class="max-w-md mx-auto space-y-4 font-semibold text-center">
+                <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-[#7A5195]">
+                    <span class="text-sm font-bold text-[#7A5195]">HIGHEST PRIORITY</span>
+                    <p class="text-xl">1. Debt Holders (Bonds)</p>
+                </div>
+                <div class="text-2xl font-black text-center text-[#FFA600]">▼</div>
+                <div class="bg-white p-4 rounded-lg shadow-lg border-l-4 border-[#FFA600] ring-2 ring-[#FFA600]">
+                    <span class="text-sm font-bold text-[#FFA600]">MIDDLE PRIORITY</span>
+                    <p class="text-xl">2. Preferred Stockholders</p>
+                </div>
+                <div class="text-2xl font-black text-center text-[#EF5675]">▼</div>
+                <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-[#EF5675]">
+                    <span class="text-sm font-bold text-[#EF5675]">LOWEST PRIORITY</span>
+                    <p class="text-xl">3. Common Stockholders</p>
+                </div>
+            </div>
+        </section>
+        
+        <hr class="my-16 border-t-2 border-gray-300">
+
+        <section id="comparison" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2">Preferred vs. Common Stock Showdown</h2>
+            <p class="text-center text-[#374C80] mb-8 max-w-2xl mx-auto">While both represent ownership, they are designed for different investment goals. This chart compares their core attributes on a scale of 1 (Low) to 10 (High).</p>
+            <div class="card">
+                <div class="chart-container">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <hr class="my-16 border-t-2 border-gray-300">
+
+        <section id="types" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2">Meet the Types of Preferred Stock</h2>
+            <p class="text-center text-[#374C80] mb-8 max-w-2xl mx-auto">Not all preferred shares are created equal. Different types offer unique features that can significantly impact an investment's risk and reward profile.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-2 text-[#7A5195]">Cumulative</h3>
+                    <p>If the company skips a dividend, it must pay all missed dividends to cumulative preferred holders before paying any to common stockholders. This is a key safety feature.</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-2 text-[#BC5090]">Convertible</h3>
+                    <p>Gives the holder the option to convert their preferred shares into a fixed number of common shares, offering the potential for capital appreciation if the company succeeds.</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-2 text-[#EF5675]">Callable</h3>
+                    <p>Allows the issuing company to buy back the shares at a set price after a certain date. This is a risk for investors, as high-yield shares may be redeemed by the issuer.</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-2 text-[#FF764A]">Participating</h3>
+                    <p>Allows holders to receive extra dividends beyond the fixed rate if the company hits certain performance targets, offering more upside potential than standard preferreds.</p>
+                </div>
+            </div>
+        </section>
+        
+        <hr class="my-16 border-t-2 border-gray-300">
+
+        <section id="pros-cons" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">The Investor's Scorecard</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-green-100 p-6 rounded-lg border-l-4 border-green-500">
+                    <h3 class="text-2xl font-bold text-green-800 mb-4 flex items-center"><span class="mr-3 text-3xl">✔</span>Pros</h3>
+                    <ul class="space-y-2 text-green-900">
+                        <li><strong>Higher Dividend Yields:</strong> Typically offers higher and more stable income than common stock and many bonds.</li>
+                        <li><strong>Priority Status:</strong> Gets paid dividends and liquidation proceeds before common stockholders.</li>
+                        <li><strong>Lower Volatility:</strong> Generally less price fluctuation than common stock.</li>
+                        <li><strong>Tax Advantages:</strong> Dividends often qualify for lower tax rates than bond interest.</li>
+                    </ul>
+                </div>
+                <div class="bg-red-100 p-6 rounded-lg border-l-4 border-red-500">
+                    <h3 class="text-2xl font-bold text-red-800 mb-4 flex items-center"><span class="mr-3 text-3xl">✖</span>Cons</h3>
+                    <ul class="space-y-2 text-red-900">
+                        <li><strong>Interest Rate Risk:</strong> Value typically falls when interest rates rise.</li>
+                        <li><strong>Limited Growth:</strong> Lacks the high capital appreciation potential of common stock.</li>
+                        <li><strong>No Voting Rights:</strong> No say in how the company is run.</li>
+                        <li><strong>Call Risk:</strong> Issuer can redeem the shares, forcing reinvestment at potentially lower rates.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 border-t-2 border-gray-300">
+
+        <section id="issuers" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2">Who Issues Preferred Stock?</h2>
+            <p class="text-center text-[#374C80] mb-8 max-w-2xl mx-auto">The market is heavily concentrated in regulated industries that use preferred stock to meet capital requirements, providing financial stability.</p>
+            <div class="card max-w-2xl mx-auto">
+                <div class="chart-container h-80 md:h-96">
+                    <canvas id="issuersChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 border-t-2 border-gray-300">
+
+        <section id="risks" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2">Understanding the Key Risk: Interest Rates</h2>
+            <p class="text-center text-[#374C80] mb-8 max-w-2xl mx-auto">The value of a fixed-dividend preferred stock has an inverse relationship with prevailing interest rates. When new, safer bonds offer higher yields, existing preferred shares become less attractive.</p>
+            <div class="card">
+                <div class="chart-container">
+                    <canvas id="interestRateChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const chartColors = {
+                blue: '#003F5C',
+                purple: '#7A5195',
+                pink: '#EF5675',
+                orange: '#FFA600',
+                lightBlue: 'rgba(55, 76, 128, 0.6)',
+                lightOrange: 'rgba(255, 166, 0, 0.6)',
+            };
+            
+            const processLabel = (label) => {
+                if (label.length > 16) {
+                    const words = label.split(' ');
+                    const lines = [];
+                    let currentLine = '';
+                    for (const word of words) {
+                        if ((currentLine + word).length > 16) {
+                            lines.push(currentLine.trim());
+                            currentLine = '';
+                        }
+                        currentLine += word + ' ';
+                    }
+                    lines.push(currentLine.trim());
+                    return lines;
+                }
+                return label;
+            };
+
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                }
+                return label;
+            };
+            
+            const defaultChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: chartColors.blue,
+                            font: { size: 14, weight: '500' }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                           title: tooltipTitleCallback
+                        },
+                        backgroundColor: 'rgba(0, 63, 92, 0.9)',
+                        titleFont: { size: 16, weight: 'bold' },
+                        bodyFont: { size: 14 },
+                        padding: 12,
+                        cornerRadius: 4
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: chartColors.blue, font: { weight: '500' } },
+                        grid: { color: 'rgba(0, 63, 92, 0.1)' }
+                    },
+                    y: {
+                        ticks: { color: chartColors.blue, font: { weight: '500' } },
+                        grid: { color: 'rgba(0, 63, 92, 0.1)' }
+                    }
+                }
+            };
+
+            new Chart(document.getElementById('comparisonChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Dividend Yield', 'Safety (Liquidation)', 'Growth Potential', 'Voting Rights', 'Volatility'],
+                    datasets: [
+                        {
+                            label: 'Preferred Stock',
+                            data: [8, 7, 2, 1, 3],
+                            backgroundColor: chartColors.lightOrange,
+                            borderColor: chartColors.orange,
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Common Stock',
+                            data: [3, 2, 9, 9, 8],
+                            backgroundColor: chartColors.lightBlue,
+                            borderColor: chartColors.blue,
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: { ...defaultChartOptions, indexAxis: 'y' }
+            });
+
+            new Chart(document.getElementById('issuersChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Financials (Banks, Insurance)', 'REITs', 'Utilities', 'Other Industrials'],
+                    datasets: [{
+                        data: [65, 15, 10, 10],
+                        backgroundColor: [chartColors.blue, chartColors.purple, chartColors.pink, chartColors.orange],
+                        borderColor: '#ffffff',
+                        borderWidth: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: chartColors.blue, font: { size: 14, weight: '500' } } },
+                        tooltip: {
+                            callbacks: {
+                                title: tooltipTitleCallback,
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('interestRateChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                    datasets: [
+                        {
+                            label: 'Market Interest Rates',
+                            data: [2, 2.5, 3.5, 4, 4.5],
+                            borderColor: chartColors.pink,
+                            backgroundColor: 'rgba(239, 86, 117, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Preferred Stock Value',
+                            data: [100, 95, 88, 85, 82],
+                            borderColor: chartColors.blue,
+                            backgroundColor: 'rgba(0, 63, 92, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: { callbacks: { title: tooltipTitleCallback } },
+                        legend: { position: 'top', labels: { color: chartColors.blue, font: { size: 14, weight: '500' } } }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Interest Rate (%)', color: chartColors.pink },
+                            ticks: { color: chartColors.pink }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: 'Stock Value ($)', color: chartColors.blue },
+                            ticks: { color: chartColors.blue },
+                            grid: { drawOnChartArea: false }
+                        },
+                        x: {
+                           ticks: { color: chartColors.blue, font: { weight: '500' } },
+                           grid: { color: 'rgba(0, 63, 92, 0.1)' }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
